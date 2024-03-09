@@ -52,5 +52,5 @@ Tested on Ubuntu 22.04
 This project was a testing ground to work with the HuggingFace plateform.
 
 # TODO
-* make a gradio GUI
 * make a clean data input (from a config file?)
+* make a gradio GUI
