@@ -4,9 +4,9 @@ torch.cuda.is_available()
 
 import moviepy.editor as mp
 
-#filename = "sample"
-# filename = "sample_10min"
-filename = "The Office S01E01 Downsize"
+
+filename = "YOUR_FILE"
+extension = filename.split(".")[-1]
 # translate_to_french = False
 translate_to_french = True
 
@@ -16,14 +16,12 @@ if not translate_to_french:
 else:
     output_srt_name = filename+".srt"
 
-# %%
 import os 
 
 if not os.path.exists(filename+".mp3"):
-    my_clip = mp.VideoFileClip(filename+".mkv")
+    my_clip = mp.VideoFileClip(filename+extension)
     my_clip.audio.write_audiofile(filename+".mp3")
 
-# %%
 import torch
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 from datasets import load_dataset, Dataset
