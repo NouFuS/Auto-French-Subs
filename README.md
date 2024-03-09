@@ -48,9 +48,10 @@ Tested on Ubuntu 22.04
   Edit the video_to_french.py file to specify the file name.
   Run the file, it will create a srt file with the same name as the input video file.
 
- 
-This project was a testing ground to work with the HuggingFace plateform.
 
 # TODO
 * make a clean data input (from a config file?)
 * make a gradio GUI
+
+# Context
+This project is a testing ground to work with the HuggingFace plateform.
