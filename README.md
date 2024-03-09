@@ -13,7 +13,7 @@ Create French subtitles directly from a video file with English audio. (also pos
 * RAM: 64Go
 
 ### Test case:
-10min video
+10min mkv file
 * GPU: 1m15
 * CPU: 5m50
 
