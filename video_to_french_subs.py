@@ -1,25 +1,36 @@
 # %%
-import torch
+import torch, time
 torch.cuda.is_available()
 
 import moviepy.editor as mp
 
+t0 = time.time()
 
 filename = "YOUR_FILE"
-extension = filename.split(".")[-1]
+filename = input_file.split(".")[0]
+extension = input_file.split(".")[1]
 # translate_to_french = False
 translate_to_french = True
 
+# use_gpu = False
+use_gpu = True
+
+if use_gpu:
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
+else:
+    device = "cpu"
+    torch_dtype = torch.float32
 
 if not translate_to_french:
-    output_srt_name = filename+"_raw_EN.srt"
+    output_srt_name = filename+"_EN.srt"
 else:
     output_srt_name = filename+".srt"
 
 import os 
 
 if not os.path.exists(filename+".mp3"):
-    my_clip = mp.VideoFileClip(filename+extension)
+    my_clip = mp.VideoFileClip(filename)
     my_clip.audio.write_audiofile(filename+".mp3")
 
 import torch
@@ -27,10 +38,6 @@ from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 from datasets import load_dataset, Dataset
 import ffmpeg
 import os
-
-# device = "cuda:0" if torch.cuda.is_available() else "cpu"
-device = "cpu" # For testing!
-torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
 
 model_id = "openai/whisper-large-v3"
 
@@ -103,36 +110,23 @@ for i in range(len(result["chunks"])):
 
         if timespan + next_timespan < maximum_timespan:
             # Sentence too fast to read, merge at any cost!
-            print("Merged sentences because timespan was too short")
-            print("Initial chunk:", chunk)
+            # print("Merged sentences because timespan was too short")
+            # print("Initial chunk:", chunk)
             chunk = {
                             "timestamp":(chunk["timestamp"][0], next_chunk["timestamp"][1]),
                             "text": chunk["text"] + next_chunk["text"]
                         }
             processed_result["chunks"].append(chunk)
-            print("Merged chunk:", chunk)
+            # print("Merged chunk:", chunk)
             skip_x = 1
             continue
         else:
             # Cancelling merge.
             processed_result["chunks"].append(chunk)
-        
-        ## Weird, this clause is not coherent with the previous one.
-        # if nb_words < minimum_words:
-        #     if len((chunk["text"] + next_chunk["text"]).split(" ")) < maximum_words:
-        #         # Sentence too short
-        #         chunk = {
-        #                         "timestamp":(chunk["timestamp"][0], next_chunk["timestamp"][1]),
-        #                         "text": chunk["text"] + next_chunk["text"]
-        #                     }
-        #         processed_result["chunks"].append(chunk)
-        #         skip_x = 1
-        #         continue
+
     else:
         # No merging to do
         processed_result["chunks"].append(chunk)
-    
-    # print(processed_result)
 
 
 # %%
@@ -141,13 +135,13 @@ pipe = pipeline("translation", model="Helsinki-NLP/opus-mt-tc-big-en-fr", batch_
 translation_timestamped = []
 
 for chunk in processed_result["chunks"]:
-    print("\nOriginal:", chunk["text"])
+    # print("\nOriginal:", chunk["text"])
     if translate_to_french:
         translation_timestamped.append([chunk["timestamp"],  pipe(chunk["text"])[0]["translation_text"]])
-        print(translation_timestamped[-1][1])
+        # print(translation_timestamped[-1][1])
     else:
         translation_timestamped.append([chunk["timestamp"],  chunk["text"]])
-    print("Timestamp:", chunk["timestamp"])
+    # print("Timestamp:", chunk["timestamp"])
     
 
 # %%
@@ -156,8 +150,8 @@ final = []
 i = 1
 for timestamp, text in translation_timestamped:
     if timestamp[0] is None or timestamp[1] is None:
-        print("Faulty timestamp:", timestamp)
-        print("text:", text)
+        # print("Faulty timestamp:", timestamp)
+        # print("text:", text)
         continue
     
     t1_str = str(datetime.timedelta(seconds=timestamp[0]))
@@ -177,8 +171,7 @@ for timestamp, text in translation_timestamped:
 import codecs
 with codecs.open(output_srt_name, 'w', 'utf-8') as the_file:
     for line in final:
-        print("line:", line)        
+        # print("line:", line)        
         the_file.write(line+'\n')
         
-
-
+print("Elapsed time:", time.time()-t0)
