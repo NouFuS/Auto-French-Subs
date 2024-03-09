@@ -14,8 +14,8 @@ Create French subtitles directly from a video file with English audio. (also pos
 
 ### Test case:
 10min video
-* GPU: 1m30
-* CPU: 6min
+* GPU: 1m15
+* CPU: 5m50
 
 # Workflow: 
 * Extract the audio track
@@ -43,6 +43,12 @@ Tested on Ubuntu 22.04
   *   `pip install transformers`
 * datasets library from HuggingFace
   * `pip install --upgrade git+https://github.com/huggingface/transformers.git accelerate datasets[audio]`
-  
 
+# Usage
+  Edit the video_to_french.py file to specify the file name.
+  Run the file, it will create a srt file with the same name as the input video file.
+
+ 
 This project was a testing ground to work with the HuggingFace plateform.
+
+TODO: make a gradio GUI and a clean data input. For now, you need to modify variables the code itself.
