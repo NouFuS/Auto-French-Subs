@@ -1,6 +1,6 @@
-# Automatic Video to French SRT
+# Automatic English Video to French SRT
 
-Create French subtitles directly from a video file. (also possible to skip the translation to obtain the raw english subtitles)
+Create French subtitles directly from a video file with English audio. (also possible to skip the translation to obtain the raw english subtitles)
 
 ## Quality: 
 * English transcript: Good
