@@ -32,7 +32,7 @@ def process_file(folder, input_file, output_folder, soundtrack_folder, use_gpu=T
     if not translate_to_french:
         output_srt_name = filename+"_EN.srt"
     else:
-        output_srt_name = filename+".srt"
+        output_srt_name = filename+".fre.srt"
 
     if not os.path.exists(os.path.join(soundtrack_folder, filename+".mp3")):
         print("Extracting soundtrack...", end="")
@@ -198,7 +198,7 @@ if __name__ == "__main__":
         
         for file in tqdm(files):
             print("\n\nProcessing:", file)
-            if config["FILES"]["skip_if_srt_exists"] and not os.path.exists(os.path.join(config["FILES"]["output_folder"], file.split(".")[0]+".srt")):
+            if config["FILES"]["skip_if_srt_exists"] and not os.path.exists(os.path.join(config["FILES"]["output_folder"], file.split(".")[0]+".fre.srt")):
                 process_file(
                             config["FILES"]["folder_path"], 
                             file, 
