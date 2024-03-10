@@ -11,7 +11,7 @@ from pprint import pprint
 from tqdm import tqdm
 
 def process_file(folder, input_file, output_folder, soundtrack_folder, use_gpu=True, translate_to_french=True, debug=False):
-    print("\n\nProcessing:", input_file)
+    
     t0 = time.time()
 
     if not os.path.exists(output_folder):
@@ -62,7 +62,7 @@ def process_file(folder, input_file, output_folder, soundtrack_folder, use_gpu=T
         device=device,
     )
     print("Generating transcript...", end="")
-    result = pipe(os.path.join(soundtrack_folder, filename+".mp3"), generate_kwargs={"task": "translate", "language": "en"})
+    result = pipe(os.path.join(soundtrack_folder, filename+".mp3"), generate_kwargs={"language": "english"})
     print("Done")
     ## Pre-processing of the transcript: merging sentences that are too short.
     ## Pre-translation merging rules: Tries to make de printed sentences long enough to prevent flickering, and also improve translation (by having more context in a given chunk).
@@ -76,7 +76,7 @@ def process_file(folder, input_file, output_folder, soundtrack_folder, use_gpu=T
     print("Post-processing transcript chunks...", end="")
     processed_result = {"chunks":[]}
     skip_x = 0
-    for i in range(len(result["chunks"])):
+    for i in range(len(result["chunks"])-1):
         if skip_x > 0:
             skip_x -= 1
             continue
@@ -197,6 +197,7 @@ if __name__ == "__main__":
         files = os.listdir(config["FILES"]["folder_path"])
         
         for file in tqdm(files):
+            print("\n\nProcessing:", file)
             if config["FILES"]["skip_if_srt_exists"] and not os.path.exists(os.path.join(config["FILES"]["output_folder"], file.split(".")[0]+".srt")):
                 process_file(
                             config["FILES"]["folder_path"], 
@@ -206,3 +207,5 @@ if __name__ == "__main__":
                             use_gpu=config["INFERENCE"]["use_gpu"],
                             translate_to_french=config["END_RESULT"]["translate_to_french"],
                             debug=config["INFERENCE"]["debug"])
+            else:
+                print("SRT exists, skip.")
