@@ -1,0 +1,15 @@
+FILES:
+  process_single_file: False
+  filename: "sample_10min.mkv"
+  folder_path: "./targets"
+  output_folder: "./outputs"
+  soundtrack_folder: "./soundtracks"
+
+  skip_if_srt_exists: True
+
+END_RESULT:
+  translate_to_french: True
+
+INFERENCE:
+  use_gpu: True
+  debug: False
