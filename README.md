@@ -45,8 +45,8 @@ Tested on Ubuntu 22.04
   * `pip install --upgrade git+https://github.com/huggingface/transformers.git accelerate datasets[audio]`
 
 # Usage
-  Edit the video_to_french.py file to specify the file name.
-  Run the file, it will create a srt file with the same name as the input video file.
+  * Modify the `config.yaml` file to define the target folder containing your video files, output folder...etc
+  * Run the file, it will create a srt file with the same name as the input video file.
 
 
 # TODO
