@@ -124,7 +124,7 @@ def process_file(folder, input_file, output_folder, soundtrack_folder, use_gpu=T
 
     print("Translating...", end="")
 
-    pipe = pipeline("translation", model="Helsinki-NLP/opus-mt-tc-big-en-fr", batch_size=16)
+    pipe = pipeline("translation", model="Helsinki-NLP/opus-mt-tc-big-en-fr", batch_size=16, device=device)
     translation_timestamped = []
 
     for chunk in processed_result["chunks"]:
