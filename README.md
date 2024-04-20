@@ -50,7 +50,6 @@ Tested on Ubuntu 22.04
 
 
 # TODO
-* make a clean data input (from a config file?)
 * make a gradio GUI
 
 # Context
